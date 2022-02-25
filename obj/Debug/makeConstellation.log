@@ -1,0 +1,16 @@
+﻿  ofApp.cpp
+  Info: Boost.Config is older than your compiler version - probably nothing bad will happen - but you may wish to look for an update Boost version.  Define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE to suppress this message.
+c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\utils\ofutils.h : warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\ofvec3f.h : warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\ofvec2f.h : warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(49): warning C4018: '<': signed/unsigned mismatch
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(54): warning C4018: '<': signed/unsigned mismatch
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(176): warning C4018: '<': signed/unsigned mismatch
+  makeConstellation.vcxproj -> C:\Users\creator\source\repos\makeConstellation\makeConstellation\bin\makeConstellation_debug.exe
+  
+  	                   2	C:\Users\creator\Documents\of_v0.11.2_vs2017_release\libs\fmod\lib\vs\Win32\
+  	  *추가 파일  		 6018560	C:\Users\creator\source\repos\makeConstellation\makeConstellation\bin\FreeImage.dll
+  
+  	                   1	C:\Users\creator\Documents\of_v0.11.2_vs2017_release\libs\FreeImage\lib\vs\Win32\
+  	  *추가 파일  		 1544704	C:\Users\creator\source\repos\makeConstellation\makeConstellation\bin\fmod.dll
+  	  *추가 파일  		 1733120	C:\Users\creator\source\repos\makeConstellation\makeConstellation\bin\fmodL.dll
