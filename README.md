@@ -14,7 +14,7 @@ OpenFrameWorksで制作した「星座づくり」プログラムです。
 
 ![example image 1](/bin/data/Constellation1.jpg)
 
-* saveボタンを押した時の確認画面　　　　　　　　　　
+* saveボタンを押した時の確認画面　　　　　　　　　
 　　
 ![example image 2](/bin/data/Constellation3.jpg)
 
