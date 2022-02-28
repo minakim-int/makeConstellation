@@ -10,6 +10,7 @@ OpenFrameWorksで制作した「星座づくり」プログラムです。
 
 ## 使用例
 * 繋ぐ中の画面
+
 ![example image 1](/bin/data/Constellation1.jpg)
 
 * 保存された画像
