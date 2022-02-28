@@ -10,11 +10,11 @@ OpenFrameWorksで制作した「星座づくり」プログラムです。
  ** ファイル名指定機能追加予定 
 ---------------------------------------
 ## 使用例
-* 繋ぐ中の画面　　　
+* 繋ぐ中の画面　　　　　　　　
 ![example image 1](/bin/data/Constellation1.jpg)
 
-* saveボタンを押した時の確認画面　　　
+* saveボタンを押した時の確認画面　　　　　　　　
 ![example image 2](/bin/data/Constellation3.jpg)
 
-* 保存された画像　　　
+* 保存された画像　　　　　　　　
 ![example image 2](/bin/data/Constellation2.jpg)
