@@ -3,9 +3,10 @@
 c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\utils\ofutils.h : warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
 c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\ofvec3f.h : warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
 c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\ofvec2f.h : warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
-c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(49): warning C4018: '<': signed/unsigned mismatch
-c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(54): warning C4018: '<': signed/unsigned mismatch
-c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(176): warning C4018: '<': signed/unsigned mismatch
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(27): warning C4018: '<': signed/unsigned mismatch
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(59): warning C4018: '<': signed/unsigned mismatch
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(64): warning C4018: '<': signed/unsigned mismatch
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(186): warning C4018: '<': signed/unsigned mismatch
   makeConstellation.vcxproj -> C:\Users\creator\source\repos\makeConstellation\makeConstellation\bin\makeConstellation_debug.exe
   
   	                   2	C:\Users\creator\Documents\of_v0.11.2_vs2017_release\libs\fmod\lib\vs\Win32\

@@ -27,11 +27,17 @@ private:
 
 public:
 	void drawButton() const;
-	bool isIn(int x, int y, char mode) const;
+	bool isIn(int x, int y) const;
 	void setButton(float x, float y, string name) {
 		b_coord = { x,y };
 		b_width = 50;
 		b_height = 20;
+		b_name = name;
+	}
+	void setButton(float x, float y, string name, int W, int H) {
+		b_coord = { x, y };;
+		b_width = W;
+		b_height = H;
 		b_name = name;
 	}
 };
@@ -47,6 +53,7 @@ class ofApp : public ofBaseApp{
 		
 		bool reset; //is reset button pressed?
 		bool save; //is save button pressed?
+		bool newSky; //is new button pressed?
 		bool drawingLine; //show line between pickedXY and current mouseXY
 		int pickedX, pickedY; //latest selected star
 
@@ -57,6 +64,7 @@ class ofApp : public ofBaseApp{
 
 		Button saveButton;
 		Button resetButton;
+		Button newButton;
 		
 		ofImage img; //for save image
 

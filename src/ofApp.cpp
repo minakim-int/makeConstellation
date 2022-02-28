@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	reset = false;
+	newSky = false;
 	//-----Set vector size-----//
 	stars.resize(MAX_STARS);
 	listofStars.resize(MAX_STARS);
@@ -16,13 +17,22 @@ void ofApp::setup(){
 	}
 	//-----first line-----//
 	line.push_back(new ofPolyline);
-	resetButton.setButton(ofGetWidth()-140, ofGetHeight()-35, "reset");
+	resetButton.setButton(ofGetWidth()-137, ofGetHeight()-35, "reset");
 	saveButton.setButton(ofGetWidth()-70, ofGetHeight()-35, "save");
+	newButton.setButton(ofGetWidth()-190, ofGetHeight()-35, "new", 35, 20);
 }
 //--------------------------------------------------------------
 void ofApp::update(){
 	if (reset) {
+		for (int i = 0; i < line.size(); i++) {
+			line[i]->clear();
+		}
+		reset = false;
+		//resetStars();
+	}
+	if (newSky) {
 		resetStars();
+		newSky = false;
 	}
 }
 //--------------------------------------------------------------
@@ -60,13 +70,17 @@ void ofApp::draw(){
 	}
 	ofSetColor(255);
 	//-------------------Draw Buttons--------------------------//
-	if (resetButton.isIn(mouseX, mouseY, 'r')) ofSetColor(200);
+	if (resetButton.isIn(mouseX, mouseY)) ofSetColor(200);
 	if (save) ofSetColor(255, 50);
 	resetButton.drawButton();
 	
-	if (saveButton.isIn(mouseX, mouseY, 's')) ofSetColor(200);
+	if (saveButton.isIn(mouseX, mouseY)) ofSetColor(200);
 	if (save) ofSetColor(255, 50);
 	saveButton.drawButton();
+
+	if (newButton.isIn(mouseX, mouseY)) ofSetColor(200);
+	if (save)ofSetColor(255, 50);
+	newButton.drawButton();
 }
 
 //--------------------------------------------------------------
@@ -114,9 +128,11 @@ void ofApp::mousePressed(int x, int y, int button){
 			line[line.size()-1]->addVertex(pickedX, pickedY);
 		}
 	}	
-	save = saveButton.isIn(x, y, 's'); //Save Button Pressed
-	reset = resetButton.isIn(x, y, 'r'); //Reset Button Pressed
+	save = saveButton.isIn(x, y); //Save Button Pressed
+	reset = resetButton.isIn(x, y); //Reset Button Pressed
+	newSky = newButton.isIn(x, y);
 }
+
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
@@ -155,17 +171,11 @@ void Stars::drawStar(char mode) const{
 void Button::drawButton() const{
 	ofDrawRectangle(b_coord, b_width, b_height);
 	ofSetColor(0);
-	ofDrawBitmapString(b_name, b_coord.x+5, b_coord.y+15);
+	ofDrawBitmapString(b_name, b_coord.x+6, b_coord.y+15);
 	ofSetColor(255);
 }
-bool Button::isIn(int x, int y, char mode) const {
-	int xpos;
-	if(mode == 'r')
-		xpos = ofGetWidth() - 140;
-	if (mode == 's')
-		xpos = ofGetWidth() - 70;
-	int ypos = ofGetHeight() - 35;
-	if(x > xpos && x < xpos+50 && y < ypos+20 && y > ypos) { 
+bool Button::isIn(int x, int y) const {
+	if(x > b_coord.x && x < b_coord.x+b_width && y < b_coord.y+b_height && y > b_coord.y) { 
 		return true;
 	}
 	else {
