@@ -28,6 +28,9 @@ void ofApp::update(){
 		for (int i = 0; i < line.size(); i++) {
 			line[i]->clear();
 		}
+		while (selectedStarsIdx.size() != 0) {
+			selectedStarsIdx.pop_back();
+		}
 		reset = false;
 		//resetStars();
 	}
@@ -74,7 +77,7 @@ void ofApp::draw(){
 
 		string filename = "Constellation-";
 		img.grabScreen(0, 0, 600, 450);
-		filename = filename + to_string(t->tm_year + 1900) + "-" + to_string(t->tm_mon) + "-"
+		filename = filename + to_string(t->tm_year + 1900) + "-" + to_string(t->tm_mon+1) + "-"
 			+ to_string(t->tm_mday) + "-" + to_string(t->tm_hour) + to_string(t->tm_min) + to_string(t->tm_sec);
 		img.save(filename.append(".jpg"), OF_IMAGE_QUALITY_BEST);
 		writing_file = false; 

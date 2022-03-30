@@ -9,7 +9,7 @@ c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\of
 c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(913): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(914): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 c:\users\creator\documents\of_v0.11.2_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(915): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(73): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\creator\source\repos\makeconstellation\makeconstellation\src\ofapp.cpp(76): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\time.h(506): note: see declaration of 'localtime'
   makeConstellation.vcxproj -> C:\Users\creator\source\repos\makeConstellation\makeConstellation\bin\makeConstellation_debug.exe
   
