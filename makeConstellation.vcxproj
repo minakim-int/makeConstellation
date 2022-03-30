@@ -674,6 +674,7 @@ C:\Users\creator\Documents\of_v0.11.2_vs2017_release\addons\ofxOpenCv\libs\openc
     <ClInclude Include="..\..\..\..\Documents\of_v0.11.2_vs2017_release\addons\ofxOpenCv\src\ofxCvImage.h" />
     <ClInclude Include="..\..\..\..\Documents\of_v0.11.2_vs2017_release\addons\ofxOpenCv\src\ofxCvShortImage.h" />
     <ClInclude Include="..\..\..\..\Documents\of_v0.11.2_vs2017_release\addons\ofxOpenCv\src\ofxOpenCv.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>
@@ -687,6 +688,12 @@ C:\Users\creator\Documents\of_v0.11.2_vs2017_release\addons\ofxOpenCv\libs\openc
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="bin\icon.png" />
+    <Image Include="bin\icon1.ico" />
+    <Image Include="bin\new_icon.ico" />
+    <Image Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

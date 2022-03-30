@@ -55,6 +55,8 @@ class ofApp : public ofBaseApp{
 		bool save; //is save button pressed?
 		bool newSky; //is new button pressed?
 		bool drawingLine; //show line between pickedXY and current mouseXY
+		bool writing_file;
+		bool saving;
 		int pickedX, pickedY; //latest selected star
 
 		vector<Stars> stars;
@@ -68,6 +70,7 @@ class ofApp : public ofBaseApp{
 		
 		ofImage img; //for save image
 
+		
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );

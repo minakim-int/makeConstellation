@@ -1133,8 +1133,15 @@
     <ClInclude Include="..\..\..\..\Documents\of_v0.11.2_vs2017_release\addons\ofxOpenCv\libs\opencv\include\opencv2\videoio\legacy\constants_c.h">
       <Filter>addons\ofxOpenCv\libs\opencv\include\opencv2\videoio\legacy</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="bin\icon.png" />
+    <Image Include="icon.ico" />
+    <Image Include="bin\new_icon.ico" />
+    <Image Include="bin\icon1.ico" />
   </ItemGroup>
 </Project>

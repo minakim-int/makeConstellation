@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include  <ctime>
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -34,6 +35,7 @@ void ofApp::update(){
 		resetStars();
 		newSky = false;
 	}
+	
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
@@ -65,11 +67,21 @@ void ofApp::draw(){
 			ofSetColor(255, 255, 128);
 			stars[selectedStarsIdx[i]].drawStar('m');
 		}
-		img.grabScreen(0, 0, 600, 450);
-		img.save("Constellation.jpg", OF_IMAGE_QUALITY_BEST);
 	}
-	ofSetColor(255);
+	if (writing_file) {
+		time_t timer = time(NULL);
+		struct tm* t = localtime(&timer);
+
+		string filename = "Constellation-";
+		img.grabScreen(0, 0, 600, 450);
+		filename = filename + to_string(t->tm_year + 1900) + "-" + to_string(t->tm_mon) + "-"
+			+ to_string(t->tm_mday) + "-" + to_string(t->tm_hour) + to_string(t->tm_min) + to_string(t->tm_sec);
+		img.save(filename.append(".jpg"), OF_IMAGE_QUALITY_BEST);
+		writing_file = false; 
+	}
+
 	//-------------------Draw Buttons--------------------------//
+	ofSetColor(255);
 	if (resetButton.isIn(mouseX, mouseY)) ofSetColor(200);
 	if (save) ofSetColor(255, 50);
 	resetButton.drawButton();
@@ -116,8 +128,7 @@ void ofApp::mousePressed(int x, int y, int button){
 			//-----if same star selected again-----//
 			if (!selectedStarsIdx.empty() && 
 				abs(ofDist(listofStars[selectedStarsIdx.back()].x, 
-					listofStars[selectedStarsIdx.back()].y, 
-						x, y))<=5) {
+					listofStars[selectedStarsIdx.back()].y, x, y))<=5) {
 				drawingLine = false; 
 				line[line.size() - 1]->end(); 
 				//-------Add New Line for Next Selection-------//
@@ -128,9 +139,12 @@ void ofApp::mousePressed(int x, int y, int button){
 			line[line.size()-1]->addVertex(pickedX, pickedY);
 		}
 	}	
-	save = saveButton.isIn(x, y); //Save Button Pressed
+	if (saveButton.isIn(x, y)) { //Save Button Pressed
+		save = true; writing_file = true;
+	}
+	else save = false;
 	reset = resetButton.isIn(x, y); //Reset Button Pressed
-	newSky = newButton.isIn(x, y);
+	newSky = newButton.isIn(x, y); //New Button Pressed
 }
 
 
