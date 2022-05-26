@@ -1,104 +1,189 @@
-#include "ofApp.h"
-#include  <ctime>
+﻿#include "ofApp.h"
+#include  <ctime> // イメージファイル名指定の際に現在時刻を呼出するため
+
+/* 
+ * 製作：KIM MINA（崇実大学校）
+ * 以下はopenFrameWorksの構造の簡単な説明です。
+ * 
+ * setup()が最初に呼び出された後、終了までupdate()とdraw()が交互に呼び出される。
+ * setup()：変数などを初期化
+ * update()：動作中のアプリケーションの状態をアップデート
+ * draw()：画面に絵を描く
+ * 
+ */
+
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	reset = false;
-	newSky = false;
-	//-----Set vector size-----//
-	stars.resize(MAX_STARS);
-	listofStars.resize(MAX_STARS);
-	//-----Initialize Stars-----// 
-	for (int i = 0; i < MAX_STARS; i++) {
-		stars[i].setStars();
-	}
-	//-----Listing Coordination of Stars-----//
-	for (int i = 0; i < MAX_STARS; i++) {
-		listofStars[i] = stars[i].s_coord;
-	}
-	//-----first line-----//
-	line.push_back(new ofPolyline);
-	resetButton.setButton(ofGetWidth()-137, ofGetHeight()-35, "reset");
-	saveButton.setButton(ofGetWidth()-70, ofGetHeight()-35, "save");
-	newButton.setButton(ofGetWidth()-190, ofGetHeight()-35, "new", 35, 20);
+	stars.resize(max_stars_num);
+	newStars();
+	current_width = ofGetWidth();
+	current_height = ofGetHeight();
 }
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update() {
+	//* resetボタンを押した場合、これまで作った星座を消す
 	if (reset) {
-		for (int i = 0; i < line.size(); i++) {
+		for (auto i = 0; i < line.size(); i++) {
 			line[i]->clear();
 		}
-		while (selectedStarsIdx.size() != 0) {
-			selectedStarsIdx.pop_back();
+		while (selected_stars_idx.size() != 0) {
+			selected_stars_idx.pop_back();
 		}
 		reset = false;
-		//resetStars();
 	}
-	if (newSky) {
-		resetStars();
-		newSky = false;
+
+	//* newボタンを押した場合、これまで作った星座を消す・星は再配置する
+	if (new_sky) {
+		newStars();
+		new_sky = false;
 	}
-	
+
+	//* windowサイズが変更された場合、星座の位置再調整
+	for (auto i = 0; i < stars.size(); i++) {
+		// 星の位置再調整
+		stars[i].rad *= ofGetWidth() / current_width;
+		stars[i].mag = stars[i].rad + 3;
+		stars[i].coord.x *= ofGetWidth() / current_width;
+		stars[i].coord.y *= ofGetHeight() / current_height;
+	}
+	for (auto i = 0; i < line.size(); i++){
+		// 線の位置再調整
+		for (auto& vert : line[i]->getVertices()) {
+			vert.x *= ofGetWidth()/current_width;
+			vert.y *= ofGetHeight()/current_height;
+		}
+	}
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofBackground(0, 51, 77);
-	//-------------------Draw Stars----------------------//
-	ofSetColor(255, 255, 128);
-	if (save) ofSetColor(255, 255, 128, 98); //if Save Button Pressed, non-selected Stars opacity decrease
-	for (int i = 0; i < MAX_STARS; i++) {
+	//* 背景色を塗る
+	auto bg_pct = cos(ofGetElapsedTimef()*0.05f);
+	ofBackground((1-bg_pct)*color_blueSky + (bg_pct * color_sunset)+1);
+
+	float program_timer = ofGetElapsedTimef();
+	float twinkling_offset = program_timer * 4.0f - 6.0f * floorf(program_timer * 4.0f/6.0f);
+	for (auto i = 0; i < stars.size(); i++) {
+		// 星にマウスを近づけると光るように見せる
+		if (abs(ofDist(stars[i].coord.x, stars[i].coord.y, mouseX, mouseY)) <= stars[i].mag) {
+			stars[i].drawTwinkling(color_star, twinkling_offset);
+		}
+	}
+
+	//* 星を描く
+	ofSetColor(color_star);
+	if (save) {
+		// セーブ中の確認画面ではこれまで選択した星以外透明になる
+		ofSetColor(color_star, 98); 
+	}
+	for (auto i = 0; i < stars.size()/2; i++) {
+		// 星たちの光彩をインデックス基準で半分に分けて設定
+		stars[i].drawTwinkling(color_star, 4);
+		if(stars.size()/2 > 0) stars[i + (stars.size()/2 - 1)].drawTwinkling(color_star, 6); // stars[-1]に接近するのを防ぐ
+	}
+	for (auto i = 0; i < stars.size(); i++) {
+		ofSetColor(color_star);
 		stars[i].drawStar('r');
 	}
-	//-------------------Draw Current Line-----------------------//
-	ofSetColor(255, 255, 128);
-	if (drawingLine) {
-		ofDrawLine(pickedX, pickedY, mouseX, mouseY);
-	}
-	//-----------------Nearest Star Shines----------------------//
-	for (int i = 0; i < MAX_STARS; i++) {
-		if (abs(ofDist(listofStars[i].x, listofStars[i].y, mouseX, mouseY)) <= stars[i].s_mag) {
-			stars[i].drawStar('m');
+	ofSetColor(color_star);
+	if (save) {
+		// セーブ中の確認画面ではこれまで選択した星が大きく見える
+		for (auto i = 0; i < selected_stars_idx.size(); i++) {
+			stars[selected_stars_idx[i]].drawStar('m');
 		}
 	}
-	//-------------------Draw Existing Line---------------------//
-	for (int i = 0; i < line.size(); i++) {
+
+	//* 線を描く
+	if (drawing_line) {
+		ofDrawLine(picked.x, picked.y, mouseX, mouseY);
+	}
+	for (auto i = 0; i < line.size(); i++) {
 		line[i]->draw();
 	}
-	//----------------Show Saved Constellation-------------------//
-	if (save) {
-		for (int i = 0; i < selectedStarsIdx.size(); i++) {
-			ofSetColor(255, 255, 128);
-			stars[selectedStarsIdx[i]].drawStar('m');
-		}
-	}
-	if (writing_file) {
-		time_t timer = time(NULL);
-		struct tm* t = localtime(&timer);
 
-		string filename = "Constellation-";
-		img.grabScreen(0, 0, 600, 450);
-		filename = filename + to_string(t->tm_year + 1900) + "-" + to_string(t->tm_mon+1) + "-"
-			+ to_string(t->tm_mday) + "-" + to_string(t->tm_hour) + to_string(t->tm_min) + to_string(t->tm_sec);
-		img.save(filename.append(".jpg"), OF_IMAGE_QUALITY_BEST);
-		writing_file = false; 
+	//* イメージファイルを作って保存する
+	if (writing_imgfile) {
+		saveImage();
+		writing_imgfile = false; 
 	}
 
-	//-------------------Draw Buttons--------------------------//
-	ofSetColor(255);
-	if (resetButton.isIn(mouseX, mouseY)) ofSetColor(200);
-	if (save) ofSetColor(255, 50);
-	resetButton.drawButton();
-	
-	if (saveButton.isIn(mouseX, mouseY)) ofSetColor(200);
-	if (save) ofSetColor(255, 50);
-	saveButton.drawButton();
+	//* ボタンを描く
+	btn_reset.drawButton(save, mouseX, mouseY);
+	btn_save.drawButton(save, mouseX, mouseY);
+	btn_new.drawButton(save, mouseX, mouseY);
 
-	if (newButton.isIn(mouseX, mouseY)) ofSetColor(200);
-	if (save)ofSetColor(255, 50);
-	newButton.drawButton();
+	//* 現在のwindowサイズを格納
+	current_width = ofGetWidth();
+	current_height = ofGetHeight();
 }
-
 //--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button){
+	//* 星をクリックした場合
+	for (auto i = 0; i < stars.size(); i++) {
+		int dis = abs(ofDist(stars[i].coord.x, stars[i].coord.y, x, y));
+		if (dis <= stars[i].mag) {
+			drawing_line = true;
+			picked = stars[i].coord;
+			if (!selected_stars_idx.empty()) {
+				// 正確にクリックしなくても選択できるようにする
+				bool rePicked = abs(ofDist(stars[selected_stars_idx.back()].coord.x, stars[selected_stars_idx.back()].coord.y, x, y)) <= ofGetWidth()/(default_width/5);
+				if (rePicked) {
+					// 直前と同じ星を選択した場合、線を引きやめる
+					drawing_line = false;
+					line.back()->end();
+					line.push_back(new ofPolyline);
+					break;
+				}
+			}
+			selected_stars_idx.push_back(i); 
+			line.back()->addVertex(picked);
+		}
+	}	
+
+	//* ボタンをクリックした場合
+	if (btn_save.isIn(x, y)) { 
+		save = true; writing_imgfile = true;
+	}
+	else save = false;
+	reset = btn_reset.isIn(x, y); 
+	new_sky = btn_new.isIn(x, y); 
+}
+//--------------------------------------------------------------
+void ofApp::newStars() {
+	//* 星座の初期化
+	for (auto i = 0; i < line.size(); i++) {
+		line[i]->clear(); //reset PolyLine
+	}
+	drawing_line = false; //line being invisible
+	for (int i = 0; i < stars.size(); i++) {
+		stars[i].setStarsPos(); //reset Stars
+	}
+	selected_stars_idx.clear();
+	reset = false;
+	new_sky = false;
+	line.push_back(new ofPolyline);
+}
+//--------------------------------------------------------------
+void ofApp::saveImage() {
+	time_t real_timer = time(NULL);
+	struct tm* t = localtime(&real_timer);
+
+	string filename = "Constellation-";
+	img.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+	filename = filename + to_string(t->tm_year + 1900) + "-" + to_string(t->tm_mon+1) + "-"
+		+ to_string(t->tm_mday) + "-" + to_string(t->tm_hour) + to_string(t->tm_min) + to_string(t->tm_sec);
+	img.save(filename.append(".jpg"), OF_IMAGE_QUALITY_BEST);
+}
+//--------------------------------------------------------------
+void ofApp::windowResized(int w, int h){
+	//* Windowサイズが変わるにつれてボタンの位置再調整
+	const int btn_yoffset = h - 35;
+	btn_reset.setButton(w - 137, btn_yoffset, "reset");
+	btn_save.setButton(w - 70, btn_yoffset, "save");
+	btn_new.setButton(w - 190, btn_yoffset, "new", 35, 20);
+}
+//--------------------------------------------------------------
+
 void ofApp::keyPressed(int key){
 
 }
@@ -119,40 +204,8 @@ void ofApp::mouseDragged(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-	//-----Start Drawing Line-----//
-	//-----Pick Nearest Star from Pressed location-----//
-	for (int i = 0; i < MAX_STARS; i++) {
-		int dis = abs(ofDist(listofStars[i].x, listofStars[i].y, x, y));
-		if (dis <= stars[i].s_mag) {
-			drawingLine = true;
-			pickedX = listofStars[i].x;
-			pickedY = listofStars[i].y;
-			//-----if same star selected again-----//
-			if (!selectedStarsIdx.empty() && 
-				abs(ofDist(listofStars[selectedStarsIdx.back()].x, 
-					listofStars[selectedStarsIdx.back()].y, x, y))<=5) {
-				drawingLine = false; 
-				line[line.size() - 1]->end(); 
-				//-------Add New Line for Next Selection-------//
-				line.push_back(new ofPolyline); 
-				break;
-			}
-			selectedStarsIdx.push_back(i); //Store index of Selected Stars
-			line[line.size()-1]->addVertex(pickedX, pickedY);
-		}
-	}	
-	if (saveButton.isIn(x, y)) { //Save Button Pressed
-		save = true; writing_file = true;
-	}
-	else save = false;
-	reset = resetButton.isIn(x, y); //Reset Button Pressed
-	newSky = newButton.isIn(x, y); //New Button Pressed
-}
-
-
-//--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
+
 }
 
 //--------------------------------------------------------------
@@ -166,11 +219,6 @@ void ofApp::mouseExited(int x, int y){
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
 
 }
@@ -179,38 +227,5 @@ void ofApp::gotMessage(ofMessage msg){
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
-void Stars::drawStar(char mode) const{
-	if (mode == 'r')
-		ofDrawCircle(s_coord, s_rad);
-	else if (mode == 'm')
-		ofDrawCircle(s_coord, s_mag);
-}
-void Button::drawButton() const{
-	ofDrawRectangle(b_coord, b_width, b_height);
-	ofSetColor(0);
-	ofDrawBitmapString(b_name, b_coord.x+6, b_coord.y+15);
-	ofSetColor(255);
-}
-bool Button::isIn(int x, int y) const {
-	if(x > b_coord.x && x < b_coord.x+b_width && y < b_coord.y+b_height && y > b_coord.y) { 
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-void ofApp::resetStars() {
-	for (int i = 0; i < line.size(); i++) {
-		line[i]->clear(); //reset PolyLine
-	}
-	drawingLine = false; //line being invisible
-	for (int i = 0; i < MAX_STARS; i++) {
-		stars[i].setStars(); //reset Stars
-	}
-	for (int i = 0; i < MAX_STARS; i++) {
-		listofStars[i] = stars[i].s_coord; //overwrite Stars' coordinate lists
-	}
-	selectedStarsIdx.clear();
-	reset = false;
-}
+
 

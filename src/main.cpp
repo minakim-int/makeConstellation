@@ -1,21 +1,18 @@
-#include "ofMain.h"
+﻿#include "ofMain.h"
 #include "ofApp.h"
-#include <crtdbg.h>
+//#include <crtdbg.h>
 
 //========================================================================
 int main( ){
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	ofGLFWWindowSettings settings; 
-	settings.setSize(600, 450);
+
+	settings.setSize(default_width, default_height); // ofApp.h
 	settings.windowMode = OF_WINDOW; 
-	settings.resizable = false;
-	settings.title = "myConstellation";
+	settings.resizable = true;
+	settings.title = "makeConstellation";
+
 	ofCreateWindow(settings);
-
-	//ofSetupOpenGL(600, 450, OF_WINDOW);			// <-------- setup the GL context
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
+	// メインアプリケーション呼出
 	ofRunApp(new ofApp());
-
 }
